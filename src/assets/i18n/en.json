@@ -1,0 +1,11 @@
+{
+  "START_NEW_BLOG": "Start a new blog",
+  "LOG_IN": "Log in",
+  "SEARCH": "Search",
+  "USERNAME": "Username",
+  "PASSWORD": "Password",
+  "POSTS": "Posts",
+  "PAGES": "Pages",
+  "PUBLISHED_ON": "Published on {{ date }}",
+  "DRAFT_ON": "Draft on {{ date }}"
+}

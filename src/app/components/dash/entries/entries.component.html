@@ -1,0 +1,59 @@
+<ion-header>
+  <!-- First toolbar -->
+  <ion-toolbar color="primary">
+    <!-- Menu toggle button -->
+    <ion-buttons slot="start">
+      <ion-menu-button autoHide="false"></ion-menu-button>
+    </ion-buttons>
+    <!-- Title -->
+    <ion-title translate>{{ isPage ? 'PAGES' : 'POSTS' }}</ion-title>
+  </ion-toolbar>
+  <!-- Second toolbar -->
+  <ion-toolbar color="primary">
+    <!-- Search -->
+    <form [formGroup]="searchForm" (ngSubmit)="getEntries()">
+      <!-- Search input -->
+      <ion-searchbar (ionClear)="onSearchClear()" debounce="100" [animated]="true" formControlName="text"
+                     placeholder="{{ 'SEARCH' | translate }}"></ion-searchbar>
+    </form>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-spinner class="content-loading" slot="fixed" *ngIf="loading"></ion-spinner>
+  <!-- List of entries -->
+  <div *ngIf="entries.count && !loading">
+    <ion-card *ngFor="let entry of entries.results" class="ion-activatable">
+      <ion-ripple-effect></ion-ripple-effect>
+      <ion-img *ngIf="entry.media.cover_image" [src]="entry.media.cover_image.thumbnail_256x256"></ion-img>
+      <ion-card-header>
+        <!-- Status -->
+        <ion-card-subtitle>
+          <ion-text color="medium">
+            <!-- Published -->
+            <span *ngIf="entry.status === 1" [translateParams]="{date: entry.published | date}" translate>
+    PUBLISHED_ON
+    </span>
+            <!-- Draft -->
+            <span class="o-fade" *ngIf="entry.status === 0" [translateParams]="{date: entry.created | date}"
+                  translate>
+    DRAFT_ON
+    </span>
+          </ion-text>
+        </ion-card-subtitle>
+        <ion-card-title>{{ entry.title }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ entry.excerpt }}</p>
+      </ion-card-content>
+      <ion-item lines="none" class="bg-trans" *ngIf="entry.updated_by">
+        <ion-avatar margin-end slot="start" *ngIf="entry.updated_by.media.tiny">
+          <img width="40" alt="" [src]="entry.updated_by.media.tiny">
+        </ion-avatar>
+        <ion-label>
+          <p>{{ entry.updated_by.username }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </div>
+</ion-content>

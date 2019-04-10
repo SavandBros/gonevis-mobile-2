@@ -1,5 +1,7 @@
 {
   "name": "gonevis-mobile-2",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

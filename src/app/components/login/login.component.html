@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Login</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col sizeSm="8" offsetSm="2">
+        <ion-card padding>
+          <ion-card-content>
+            <form [formGroup]="logInForm" (ngSubmit)="login()">
+              <!-- Username -->
+              <ion-item>
+                <!-- Label -->
+                <ion-label position="floating">{{ 'USERNAME' | translate }}</ion-label>
+                <!-- Input -->
+                <ion-input type="text" formControlName="username" required></ion-input>
+              </ion-item>
+              <!-- Password -->
+              <ion-item>
+                <!-- Label -->
+                <ion-label position="floating">{{ 'PASSWORD' | translate }}</ion-label>
+                <!-- Input -->
+                <ion-input clearInput type="password" formControlName="password" required></ion-input>
+              </ion-item>
+              <!-- Submit -->
+              <ion-button color="tertiary" margin-top expand="block" type="submit"
+                          [disabled]="loading || logInForm.invalid">
+                {{ 'LOG_IN' | translate }}
+              </ion-button>
+            </form>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

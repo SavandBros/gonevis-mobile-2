@@ -1,0 +1,69 @@
+<ion-split-pane>
+  <ion-menu>
+    <!-- Blog wrapper -->
+    <ion-header class="blog-wrapper">
+      <!-- Settings button -->
+      <ion-fab vertical="top" horizontal="end" slot="fixed">
+        <ion-button color="transparent">
+          <!-- Icon -->
+          <ion-icon name="settings" size="small"></ion-icon>
+        </ion-button>
+      </ion-fab>
+      <div padding-top>
+        <!-- Blog logo -->
+        <div padding-start>
+          <img width="40" alt="" [src]="blog.logo">
+        </div>
+        <!-- Blog information -->
+        <ion-item lines="none" color="transparent" button (click)="showBlogs = !showBlogs">
+          <ion-label>
+            <ion-text color="light">
+              <!-- Blog title -->
+              <h3>{{ blog.title }}</h3>
+              <!-- Blog URL -->
+              <p>{{ blog.url }}</p>
+            </ion-text>
+          </ion-label>
+          <!-- Icon -->
+          <ion-icon name="arrow-dropdown" color="light" slot="end" size="small"></ion-icon>
+        </ion-item>
+      </div>
+    </ion-header>
+    <ion-content>
+      <!-- App pages -->
+      <ion-list *ngIf="!showBlogs">
+        <!-- Page -->
+        <ion-menu-toggle auto-hide="false" *ngFor="let page of appPages">
+          <!-- Item as link -->
+          <ion-item lines="none" button [routerDirection]="'root'" [routerLink]="['/dash', page.url]">
+            <!-- Page icon -->
+            <ion-icon slot="start" [name]="page.icon"></ion-icon>
+            <!-- Page title -->
+            <ion-label>{{ page.title }}</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+      <!-- Blog-s -->
+      <ion-list *ngIf="showBlogs">
+        <!-- List of blog-s -->
+        <ion-menu-toggle auto-hide="false" *ngFor="let blog of user.sites">
+          <!-- Blog Information -->
+          <ion-item lines="none" button (click)="changeBlog(blog)">
+            <!-- Blog logo -->
+            <ion-avatar slot="start">
+              <img [src]="blog.logo" alt="">
+            </ion-avatar>
+            <!-- Blog Information -->
+            <ion-label>
+              <!-- Blog title -->
+              <h3>{{ blog.title }}</h3>
+              <!-- Blog URL -->
+              <p>{{ blog.url }}</p>
+            </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet main></ion-router-outlet>
+</ion-split-pane>
