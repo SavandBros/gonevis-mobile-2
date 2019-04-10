@@ -15,7 +15,7 @@ export class DashComponent implements OnInit {
   public appPages = [{
     title: 'Posts',
     url: 'posts',
-    icon: 'paper'
+    icon: 'list'
   }, {
     title: 'Pages',
     url: 'pages',
