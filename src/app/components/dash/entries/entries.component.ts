@@ -48,8 +48,10 @@ export class EntriesComponent implements OnInit {
   }
 
   getEntries(refreshEvent?: IonRefresher): void {
-    // Update loading state.
-    this.loading = true;
+    if (!refreshEvent) {
+      // Update loading state.
+      this.loading = true;
+    }
     // Set needed params.
     const params: { [key: string]: string } = {
       site: this.authService.blogValue.id,
