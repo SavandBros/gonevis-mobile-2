@@ -4,6 +4,8 @@
   "SEARCH": "Search",
   "USERNAME": "Username",
   "PASSWORD": "Password",
+  "PULL_TO_REFRESH": "Pull to refresh",
+  "REFRESHING": "Refreshing...",
   "POSTS": "Posts",
   "PAGES": "Pages",
   "PUBLISHED_ON": "Published on {{ date }}",
