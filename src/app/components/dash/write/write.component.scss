@@ -1,0 +1,12 @@
+textarea {
+  font-weight: 700;
+  font-size: 2em;
+  width: 100%;
+  border: none;
+  resize: none;
+  outline: none;
+
+  &::placeholder {
+    color: var(--ion-color-medium);
+  }
+}

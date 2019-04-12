@@ -1,0 +1,23 @@
+<ion-header>
+  <!-- First toolbar -->
+  <ion-toolbar color="dark">
+    <!-- Back button -->
+    <ion-buttons slot="start">
+      <ion-button (click)="goBack()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <!-- Publish button -->
+    <ion-buttons slot="end">
+      <ion-button color="warning">Publish</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <!-- Title -->
+  <textarea padding aria-label="" autosize (keydown)="preventTitleBreak($event)"
+            [(ngModel)]="entry.title" placeholder="Title"></textarea>
+  <!-- Editor (content) -->
+  <quill-editor [(ngModel)]="entry.content" [placeholder]="'Content'"></quill-editor>
+</ion-content>
