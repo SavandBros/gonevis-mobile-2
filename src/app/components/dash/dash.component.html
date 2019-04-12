@@ -32,6 +32,24 @@
     <ion-content>
       <!-- App pages -->
       <ion-list *ngIf="!showBlogs">
+        <!-- Divider -->
+        <ion-item-divider>
+          <ion-label color="medium">Write new post</ion-label>
+        </ion-item-divider>
+        <!-- Write -->
+        <ion-menu-toggle auto-hide="false">
+          <!-- Item as link -->
+          <ion-item lines="none" button [routerDirection]="'root'" [routerLink]="['/dash', 'write']">
+            <!-- Page icon -->
+            <ion-icon slot="start" name="add"></ion-icon>
+            <!-- Page title -->
+            <ion-label>Write</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+        <!-- Divider -->
+        <ion-item-divider>
+          <ion-label color="medium">Manage</ion-label>
+        </ion-item-divider>
         <!-- Page -->
         <ion-menu-toggle auto-hide="false" *ngFor="let page of appPages">
           <!-- Item as link -->

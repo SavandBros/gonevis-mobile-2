@@ -21,6 +21,12 @@ const routes: Routes = [{
       isPage: true
     }
   }, {
+    path: 'write',
+    loadChildren: './write/write.module#WriteModule'
+  }, {
+    path: 'write/:entryId',
+    loadChildren: './write/write.module#WriteModule'
+  }, {
     path: '',
     redirectTo: 'posts',
     pathMatch: 'full'
