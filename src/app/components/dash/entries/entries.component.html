@@ -23,14 +23,14 @@
   <!-- Spinner -->
   <ion-spinner class="content-loading" slot="fixed" *ngIf="loading"></ion-spinner>
   <!-- Refresher -->
-  <!-- Custom Refresher Content -->
   <ion-refresher slot="fixed" (ionRefresh)="getEntries($event)">
     <ion-refresher-content [pullingText]="'PULL_TO_REFRESH' | translate" [refreshingText]="'REFRESHING' | translate">
     </ion-refresher-content>
   </ion-refresher>
   <!-- List of entries -->
   <div *ngIf="entries.count && !loading">
-    <ion-card *ngFor="let entry of entries.results" class="ion-activatable">
+    <ion-card *ngFor="let entry of entries.results" [routerLink]="['/dash', 'write', entry.id]"
+              class="ion-activatable">
       <ion-ripple-effect></ion-ripple-effect>
       <ion-img *ngIf="entry.media.cover_image" [src]="entry.media.cover_image.thumbnail_256x256"></ion-img>
       <ion-card-header>
