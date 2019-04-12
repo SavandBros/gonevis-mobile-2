@@ -9,9 +9,60 @@
 @import '~@ionic/angular/css/text-alignment.css';
 @import '~@ionic/angular/css/text-transformation.css';
 @import '~@ionic/angular/css/flex-utils.css';
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.snow.css';
 
 ion-spinner.content-loading {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+[contenteditable] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.ql-editor.ql-blank::before {
+  color: var(--ion-color-medium);
+  content: attr(data-placeholder);
+  font-style: normal;
+}
+
+.ql-toolbar {
+  &.ql-snow {
+    height: 45px;
+    padding: 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 15;
+    white-space: nowrap;
+    overflow-x: scroll;
+    background: rgba(var(--ion-color-light-rgb), 0.9);
+    text-align: center;
+
+    .ql-formats {
+      height: 100%;
+
+      .ql-active {
+        background: rgba(var(--ion-color-primary-rgb), 0.15);
+      }
+
+      .ql-picker {
+        height: 100%;
+        line-height: 40px;
+      }
+
+      button {
+        height: 100%;
+        width: 45px;
+        padding: 10px;
+      }
+    }
+  }
+}
+
+.ql-editor {
+  padding-bottom: 55px;
 }
