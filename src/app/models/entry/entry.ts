@@ -101,7 +101,7 @@ export default class Entry {
     let entryMediaValue = null;
 
     // Check if property 'cover_image' has a value.
-    if (data['media'].cover_image) {
+    if (data['media'] && data['media'].cover_image) {
       entryMediaValue = new DolphinFile(data['media'].cover_image);
     }
 
@@ -117,8 +117,10 @@ export default class Entry {
 
     this.updated_by = updatedByValue;
 
-    for (const tag of data['tags']) {
-      this.tags.push(new Tag(tag));
+    if (data['tags']) {
+      for (const tag of data['tags']) {
+        this.tags.push(new Tag(tag));
+      }
     }
   }
 }
