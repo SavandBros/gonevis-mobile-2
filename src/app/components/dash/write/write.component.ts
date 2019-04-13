@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './write.component.html',
   styleUrls: ['./write.component.scss'],
 })
-export class WriteComponent implements OnInit {
+export class WriteComponent {
   // Platform back button subscription.
   backButtonSubscription: Subscription;
   // Instance of entry.
@@ -36,20 +36,6 @@ export class WriteComponent implements OnInit {
     // Subscribe to platform's back button event.
     this.backButtonSubscription = this.platform.backButton.subscribe((): void => {
       this.goBack();
-    });
-  }
-
-  ngOnInit(): void {
-    // Subscribe to current route's params.
-    this.route.params.subscribe((params: Params): void => {
-      // Check if there is 'entryId' in params.
-      if (params.entryId) {
-        // Get entry based on param's 'entryId' value.
-        this.entryService.detail(`website/entry/${params.entryId}/`).subscribe((data: Entry): void => {
-          // Update entry.
-          this.entry = data;
-        });
-      }
     });
   }
 
@@ -78,5 +64,21 @@ export class WriteComponent implements OnInit {
       // Unsubscribe back button event.
       this.backButtonSubscription.unsubscribe();
     }
+  }
+
+  ionViewWillEnter() {
+    // Instance of entry.
+    this.entry = new Entry({ content: '', site: this.authService.blogValue.id });
+    // Subscribe to current route's params.
+    this.route.params.subscribe((params: Params): void => {
+      // Check if there is 'entryId' in params.
+      if (params.entryId) {
+        // Get entry based on param's 'entryId' value.
+        this.entryService.detail(`website/entry/${params.entryId}/`).subscribe((data: Entry): void => {
+          // Update entry.
+          this.entry = data;
+        });
+      }
+    });
   }
 }
