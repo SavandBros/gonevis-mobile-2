@@ -52,7 +52,7 @@
       <ion-card-content>
         <p>{{ entry.excerpt }}</p>
       </ion-card-content>
-      <ion-item lines="none" class="bg-trans" *ngIf="entry.updated_by">
+      <ion-item color="transparent" lines="none" *ngIf="entry.updated_by">
         <ion-avatar margin-end slot="start" *ngIf="entry.updated_by.media.tiny">
           <img width="40" alt="" [src]="entry.updated_by.media.tiny">
         </ion-avatar>
