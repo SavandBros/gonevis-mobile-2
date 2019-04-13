@@ -22,11 +22,12 @@ const routes: Routes = [{
     QuillModule.forRoot({
       modules: {
         toolbar: [
-          ['bold', 'italic'],
-          [{ 'header': 1}, { 'header': 2}],
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+          ['bold', 'italic', 'strike', 'underline'],
+          ['link', { 'list': 'bullet' }, { 'align': [] }],
+          [{ 'header': [1, 2, 3, false]}]
         ]
-      }
+      },
+      theme: 'bubble'
     }),
     RouterModule.forChild(routes)
   ]
