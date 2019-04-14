@@ -20,14 +20,41 @@
 </ion-header>
 
 <ion-content>
-  <!-- Spinner -->
-  <ion-spinner class="content-loading" slot="fixed" *ngIf="loading"></ion-spinner>
   <!-- Refresher -->
   <ion-refresher slot="fixed" (ionRefresh)="getEntries($event)">
     <ion-refresher-content [pullingText]="'PULL_TO_REFRESH' | translate" [refreshingText]="'REFRESHING' | translate">
     </ion-refresher-content>
   </ion-refresher>
-  <!-- List of entries -->
+  <!-- Loading status -->
+  <div *ngIf="loading">
+    <ion-card *ngFor="let hello of skeletons">
+      <ion-skeleton-text no-margin animated style="height: 150px; border-radius: 0"></ion-skeleton-text>
+      <ion-card-header>
+        <ion-card-subtitle>
+          <ion-text color="medium">
+            <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+          </ion-text>
+        </ion-card-subtitle>
+        <ion-card-title>
+          <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 70%"></ion-skeleton-text>
+      </ion-card-content>
+      <ion-item color="transparent" lines="none">
+        <ion-avatar margin-end slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+        </ion-label>
+      </ion-item>
+    </ion-card>
+  </div>
   <div *ngIf="entries.count && !loading">
     <ion-card *ngFor="let entry of entries.results" [routerLink]="['/dash', 'write', entry.id]"
               class="ion-activatable">

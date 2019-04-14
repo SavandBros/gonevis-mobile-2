@@ -7,7 +7,6 @@ import { EntryService } from '../../../services/entry/entry.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserBlog } from '../../../models/user/user';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { promise } from 'selenium-webdriver';
 
 @Component({
   selector: 'app-entries',
@@ -23,6 +22,8 @@ export class EntriesComponent implements OnInit {
   isPage: boolean;
   // Search form.
   searchForm: FormGroup;
+  // List of skeletons.
+  skeletons: Array<number> = Array(5);
 
   constructor(private route: ActivatedRoute, private formBuilder: FormBuilder,
               private entryService: EntryService, private authService: AuthService) {
