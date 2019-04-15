@@ -59,6 +59,7 @@ export default class Entry {
   updated_by: EntryUser | null;
   tags: Array<Tag> = [];
 
+  tag_ids: Array<string> = [];
 
   constructor(data: object) {
     this.absolute_uri = data['absolute_uri'];
