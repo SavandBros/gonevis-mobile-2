@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar>
+    <!-- Close button -->
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Done</ion-button>
+    </ion-buttons>
+    <!-- Title -->
+    <ion-title translate>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="tagForm">
+    <!-- Search bar-->
+    <ion-searchbar placeholder="Add tags" formControlName="text" searchIcon="add" debounce="0"
+                   (ionClear)="onSearchClear()"
+                   (ionChange)="filterTags()">
+      <!-- Autocomplete list -->
+      <div class="tags-autocomplete" *ngIf="filteredTags.length">
+        <ion-list lines="none">
+          <!-- Title -->
+          <ion-list-header>
+            <ion-text color="medium">Tags</ion-text>
+          </ion-list-header>
+          <!-- Tags -->
+          <ion-item button *ngFor="let tag of filteredTags" (click)="addTag(tag)">{{ tag.name }}</ion-item>
+        </ion-list>
+      </div>
+    </ion-searchbar>
+  </form>
+  <!-- List of tags -->
+  <ion-chip *ngFor="let tag of entry.tags; let index = index" color="primary">
+    <!-- Tag's avatar -->
+    <ion-avatar *ngIf="tag.media.coverImage">
+      <img [src]="tag.media.coverImage.thumbnail_48x48" alt="">
+    </ion-avatar>
+    <!-- Tag's name -->
+    <ion-label>{{ tag.name }}</ion-label>
+    <!-- Remove icon -->
+    <ion-icon name="close-circle" (click)="removeTag(tag.id, index)"></ion-icon>
+  </ion-chip>
+</ion-content>

@@ -1,0 +1,24 @@
+ion-searchbar {
+  &:focus-within {
+    .tags-autocomplete {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  .tags-autocomplete {
+    position: absolute;
+    width: calc(100% - 16px);
+    left: 50%;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--ion-item-border-color, var(--ion-border-color, var(--ion-color-step-150, rgba(0, 0, 0, 0.13))));
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+    z-index: 1;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    top: 55px;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
