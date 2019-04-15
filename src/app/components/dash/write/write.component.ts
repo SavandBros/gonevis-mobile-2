@@ -29,9 +29,12 @@ export class WriteComponent {
     // Check if there is 'elementId' in event's 'data' property.
     if (event.data.elementId) {
       // Element with specific attribute.
-      const element = this.elm.nativeElement.querySelector(`[data-embed-url='${event.data.elementId}']`);
-      // Update element's 'height' style property.
-      element.setAttribute('height', event.data.height + 'px');
+      this.elm.nativeElement.querySelectorAll(`[data-embed-url='${event.data.elementId}']`).forEach(
+        (element: Element): void => {
+          // Update element's 'height' style property.
+          element.setAttribute('height', event.data.height + 'px');
+        }
+      );
     }
   }
 
