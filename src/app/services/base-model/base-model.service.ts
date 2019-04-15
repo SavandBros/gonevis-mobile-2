@@ -53,6 +53,20 @@ export class BaseModelService<T> {
   }
 
   /**
+   * Make an API call to update.
+   */
+  put(endpoint: string, body: T): Observable<T> {
+    // API call
+    return this.http.put<T>(this.apiService.baseApi + endpoint, body)
+      .pipe(
+        map((data: { [key: string]: any }): T => {
+          return new this.modelClass(data);
+        }),
+        catchError(this.apiService.handleError)
+      );
+  }
+
+  /**
    * Make an API call to delete an object from an endpoint.
    */
   remove(endpoint: string): Observable<any> {
