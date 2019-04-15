@@ -7,9 +7,13 @@
         <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <!-- Publish button -->
     <ion-buttons slot="end">
-      <ion-button color="warning">Publish</ion-button>
+      <!-- Update button -->
+      <ion-button color="success" (click)="presentAlertConfirm()">Publish</ion-button>
+      <!-- Settings button -->
+      <ion-button (click)="presentWriteModal()">
+        <ion-icon name="settings" slot="icon-only"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

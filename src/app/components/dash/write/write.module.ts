@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { QuillModule } from 'ngx-quill';
 import { FormsModule } from '@angular/forms';
 import { AutosizeModule } from 'ngx-autosize';
+import { WriteModalModule } from '../write-modal/write-modal.module';
 
 const routes: Routes = [{
   path: '',
@@ -19,6 +20,7 @@ const routes: Routes = [{
     IonicModule,
     FormsModule,
     AutosizeModule,
+    WriteModalModule,
     QuillModule.forRoot({
       modules: {
         toolbar: [
