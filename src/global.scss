@@ -24,6 +24,21 @@ ion-spinner.content-loading {
 }
 
 
-.ql-editor {
-  font-size: 1.25em;
+.ql-bubble {
+  .ql-editor {
+    font-size: 1.25em;
+    overflow-y: hidden;
+    height: auto;
+    caret-color: var(--ion-color-primary);
+
+    iframe {
+      padding: 0 10px;
+      max-width: 100%;
+    }
+
+    img {
+      padding: 10px;
+    }
+  }
+
 }
