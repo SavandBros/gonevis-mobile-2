@@ -4,13 +4,15 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { EntryService } from '../../../services/entry/entry.service';
 import './editor-config';
 import { AuthService } from '../../../services/auth/auth.service';
-import { AlertController, ModalController, Platform } from '@ionic/angular';
+import { AlertController, LoadingController, ModalController, Platform, ToastController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { WriteModalComponent } from '../write-modal/write-modal.component';
-import { Extends } from '@angular-devkit/schematics/collection-schema';
 import { Tag } from '../../../models/tag/tag';
-import { ApiResponseService } from '../../../services/api-response/api-response.service';
 import { EntryStatuses } from '../../../enums/entry_statuses/entry_statuses';
+import equal from 'deep-equal';
+import cloneDeep from 'lodash.clonedeep';
+import { deepCopy } from '@angular-devkit/core';
+
 
 @Component({
   selector: 'app-write',
@@ -18,10 +20,14 @@ import { EntryStatuses } from '../../../enums/entry_statuses/entry_statuses';
   styleUrls: ['./write.component.scss'],
 })
 export class WriteComponent {
+  // Current entry's id.
+  private entryId: string;
   // Platform back button subscription.
   backButtonSubscription: Subscription;
   // Instance of entry.
   entry: Entry = new Entry({ content: '', site: this.authService.blogValue.id });
+  // And instance of entry which will hold old entry.
+  private oldEntry: Entry;
 
   // Host listener which will listen to 'message' event.
   @HostListener('window:message', ['$event'])
@@ -41,10 +47,19 @@ export class WriteComponent {
   constructor(private route: ActivatedRoute, private router: Router,
               private elm: ElementRef, private platform: Platform,
               private modalController: ModalController, private alertController: AlertController,
+              private loadingController: LoadingController, private toastController: ToastController,
               private entryService: EntryService, private authService: AuthService) {
     // Subscribe to platform's back button event.
     this.backButtonSubscription = this.platform.backButton.subscribe((): void => {
       this.goBack();
+    });
+  }
+
+  async presentToast(message: string, color?: string): Promise<HTMLIonToastElement> {
+    return await this.toastController.create({
+      message: message,
+      duration: 3500,
+      color: color ? color : 'dark'
     });
   }
 
@@ -80,14 +95,10 @@ export class WriteComponent {
       buttons: [{
         text: 'Not yet',
         cssClass: 'secondary',
-        handler: () => {
-          this.updateEntry(true);
-        }
+        handler: (): Promise<void> => this.updateEntry(true)
       }, {
         text: 'Publish',
-        handler: () => {
-          this.updateEntry();
-        }
+        handler: (): Promise<void> => this.updateEntry()
       }]
     });
 
@@ -98,22 +109,49 @@ export class WriteComponent {
   * This function will save post as draft and navigates to 'posts' route.
   * */
   goBack(): void {
-    this.router.navigate(['/dash', 'posts']);
+    let isEqual = equal(this.entry, this.oldEntry);
+    // Check equality.
+    if (this.oldEntry.entrydraft) {
+      isEqual = equal(this.entry, this.oldEntry.entrydraft);
+    }
+    if (!isEqual) {
+      // Check if entry's status is published.
+      if (this.entry.status === EntryStatuses.PUBLISHED) {
+        delete this.entry.status;
+      }
+      this.updateEntry().then((): Promise<boolean> => {
+        return this.router.navigate(['/dash', 'posts']);
+      });
+    } else {
+      this.router.navigate(['/dash', 'posts']);
+    }
   }
 
   /**
-   * @desc This function will Update entry.
+   * This function will Update entry.
    */
   async updateEntry(asDraft?: boolean): Promise<void> {
+    // Create loading instance.
+    const loading = await this.loadingController.create();
+    // Present loading.
+    await loading.present();
+    // If draft, then change entry's status.
     if (asDraft) {
       this.entry.status = EntryStatuses.DRAFT;
     }
     // Update tag id-s array.
     await this.entry.tags.map((tag: Tag): number => this.entry.tag_ids.push(tag.id));
+    if (!this.entry.tags.length) {
+      this.entry.tag_ids = null;
+    }
     // API call.
-    this.entryService.put(`website/entry/${this.entry.id}/`, this.entry).subscribe((data: Entry): void => {
+    this.entryService.put(`website/entry/${this.entryId}/`, this.entry).subscribe((data: Entry): void => {
       // Update entry data.
       this.entry = data;
+      // Update old entry data.
+      this.oldEntry = cloneDeep(data);
+      this.presentToast('hello').then((toast) => toast.present());
+      loading.dismiss();
     }, (error: Array<Object>): void => {
       console.log(error);
     });
@@ -146,12 +184,23 @@ export class WriteComponent {
   ionViewWillEnter() {
     // Instance of entry.
     this.entry = new Entry({ content: '', site: this.authService.blogValue.id });
+    // Make a copy of entry.
+    this.oldEntry = cloneDeep(this.entry);
     // Subscribe to current route's params.
     this.route.params.subscribe((params: Params): void => {
       // Check if there is 'entryId' in params.
       if (params.entryId) {
+        // Update current entry's id.
+        this.entryId = params.entryId;
         // Get entry based on param's 'entryId' value.
         this.entryService.detail(`website/entry/${params.entryId}/`).subscribe((data: Entry): void => {
+          // Make a copy of returned data.
+          this.oldEntry = cloneDeep(data);
+          if (data.entrydraft) {
+            data = data.entrydraft;
+            this.presentToast('You have unpublished changes', 'warning')
+              .then((toast): Promise<void> => toast.present());
+          }
           // Update entry.
           this.entry = data;
         });
