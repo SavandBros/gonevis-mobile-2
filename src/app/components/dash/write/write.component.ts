@@ -83,8 +83,10 @@ export class WriteComponent {
     this.writeModal().then((modal: HTMLIonModalElement): void => {
       // Listen to write modal dismiss data.
       modal.onDidDismiss().then((data: { data: { entry: Entry }, role: string }): void => {
-        // Update entry based on returned data.
-        this.entry = data.data.entry;
+        if (data.data) {
+          // Update entry based on returned data.
+          this.entry = data.data.entry;
+        }
       });
     });
   }
