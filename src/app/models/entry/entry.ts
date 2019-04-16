@@ -1,6 +1,7 @@
 import { DolphinFile } from '../dolphin-file/dolphin-file';
 import { Media } from '../media/media';
 import { Tag } from '../tag/tag';
+import { el } from '@angular/platform-browser/testing/src/browser_util';
 
 class EntryMedia {
   cover_image: DolphinFile;
@@ -88,15 +89,15 @@ export default class Entry {
     this.view_count = data['view_count'];
     this.vote_count = data['vote_count'];
 
-    // Entry draft default value
-    let entryDraftValue = null;
+    // // Entry draft default value
+    // let entryDraftValue = null;
 
     // Check if property 'entrydraft' has a value.
     if (data['entrydraft']) {
-      entryDraftValue = new Entry(data['entrydraft']);
+      this.entrydraft = new Entry(data['entrydraft']);
+    } else {
+      delete this.entrydraft;
     }
-
-    this.entrydraft = entryDraftValue;
 
     // Entry media default value
     let entryMediaValue = null;
