@@ -11,8 +11,7 @@ import { Tag } from '../../../models/tag/tag';
 import { EntryStatuses } from '../../../enums/entry_statuses/entry_statuses';
 import equal from 'deep-equal';
 import cloneDeep from 'lodash.clonedeep';
-import { deepCopy } from '@angular-devkit/core';
-
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-write',
@@ -32,7 +31,7 @@ export class WriteComponent {
   // Host listener which will listen to 'message' event.
   @HostListener('window:message', ['$event'])
   embedListeners(event: any): void {
-    // Check if there is 'elementId' in event's 'data' property.
+    // Check if  there is 'elementId' in event's 'data' property.
     if (event.data.elementId) {
       // Element with specific attribute.
       this.elm.nativeElement.querySelectorAll(`[data-embed-url='${event.data.elementId}']`).forEach(
@@ -48,18 +47,24 @@ export class WriteComponent {
               private elm: ElementRef, private platform: Platform,
               private modalController: ModalController, private alertController: AlertController,
               private loadingController: LoadingController, private toastController: ToastController,
-              private entryService: EntryService, private authService: AuthService) {
+              private entryService: EntryService, private authService: AuthService,
+              private translateService: TranslateService) {
     // Subscribe to platform's back button event.
     this.backButtonSubscription = this.platform.backButton.subscribe((): void => {
       this.goBack();
     });
   }
 
-  async presentToast(message: string, color?: string): Promise<HTMLIonToastElement> {
-    return await this.toastController.create({
-      message: message,
-      duration: 3500,
-      color: color ? color : 'dark'
+  presentToast(message: string, color?: string): void {
+    this.translateService.get(message).subscribe(async (translation: string): Promise<void> => {
+      // Wait for toast creation.
+      const toast = await this.toastController.create({
+        message: translation,
+        duration: 3500,
+        color: color ? color : 'dark'
+      });
+      // Present toast.
+      toast.present();
     });
   }
 
@@ -121,9 +126,8 @@ export class WriteComponent {
       if (this.entry.status === EntryStatuses.PUBLISHED) {
         delete this.entry.status;
       }
-      this.updateEntry().then((): Promise<boolean> => {
-        return this.router.navigate(['/dash', 'posts']);
-      });
+      // Update entry and navigate to posts list.
+      this.updateEntry(null, true).then(() => this.router.navigate(['/dash', 'posts']));
     } else {
       this.router.navigate(['/dash', 'posts']);
     }
@@ -132,11 +136,14 @@ export class WriteComponent {
   /**
    * This function will Update entry.
    */
-  async updateEntry(asDraft?: boolean): Promise<void> {
+  async updateEntry(asDraft?: boolean, syncing?: boolean): Promise<void> {
     // Create loading instance.
-    const loading = await this.loadingController.create();
+    const loading = await this.loadingController.create({
+      message: this.translateService.instant(syncing ? 'SYNCING_UNSAVED_CHANGES' : 'UPDATING'),
+    });
     // Present loading.
-    await loading.present();
+    loading.present();
+
     // If draft, then change entry's status.
     if (asDraft) {
       this.entry.status = EntryStatuses.DRAFT;
@@ -147,12 +154,11 @@ export class WriteComponent {
       this.entry.tag_ids = null;
     }
     // API call.
-    this.entryService.put(`website/entry/${this.entryId}/`, this.entry).subscribe((data: Entry): void => {
+    await this.entryService.put(`website/entry/${this.entryId}/`, this.entry).toPromise().then((data: Entry): void => {
       // Update entry data.
       this.entry = data;
       // Update old entry data.
       this.oldEntry = cloneDeep(data);
-      this.presentToast('hello').then((toast) => toast.present());
       loading.dismiss();
     }, (error: Array<Object>): void => {
       console.log(error);
@@ -200,8 +206,7 @@ export class WriteComponent {
           this.oldEntry = cloneDeep(data);
           if (data.entrydraft) {
             data = data.entrydraft;
-            this.presentToast('You have unpublished changes', 'warning')
-              .then((toast): Promise<void> => toast.present());
+            this.presentToast('UNPUBLISHED_CHANGES', 'warning');
           }
           // Update entry.
           this.entry = data;

@@ -6,8 +6,11 @@
   "PASSWORD": "Password",
   "PULL_TO_REFRESH": "Pull to refresh",
   "REFRESHING": "Refreshing...",
+  "UPDATING": "Updating...",
   "POSTS": "Posts",
   "PAGES": "Pages",
   "PUBLISHED_ON": "Published on {{ date }}",
-  "DRAFT_ON": "Draft on {{ date }}"
+  "DRAFT_ON": "Draft on {{ date }}",
+  "UNPUBLISHED_CHANGES": "You have unpublished changes",
+  "SYNCING_UNSAVED_CHANGES": "Syncing unsaved changes"
 }
